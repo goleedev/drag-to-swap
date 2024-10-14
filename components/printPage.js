@@ -56,18 +56,24 @@ const PrintPhoto = styled.div`
   }
 `;
 
-const SortableItem = ({ id, url }) => {
+const FadingImage = styled(Image)`
+  opacity: ${({ $isFading }) => ($isFading ? 0.3 : 1)};
+  transition: opacity 0.5s ease-out;
+`;
+
+const SortableItem = ({ id, url, isFading }) => {
   const { attributes, listeners, setNodeRef } = useSortable({ id });
 
   return (
     <PrintPhoto ref={setNodeRef} {...attributes} {...listeners}>
       {url ? (
-        <Image
+        <FadingImage
           width={600}
           height={400}
           src={url}
           alt={`Test Image ${id}`}
           loading="eager"
+          $isFading={isFading}
         />
       ) : (
         <>
@@ -99,6 +105,7 @@ const PrintPage = ({ data }) => {
       .map((img, imgIndex) => ({
         id: `${pageIndex}-${imgIndex}`,
         url: img,
+        isFading: false,
       })),
   }));
   const [pages, setPages] = useState(initialData);
@@ -128,8 +135,19 @@ const PrintPage = ({ data }) => {
         });
 
         if (activeItem && overItem) {
-          newPages[activePage].images[activeIndex] = overItem;
+          newPages[activePage].images[activeIndex] = {
+            ...overItem,
+            isFading: true,
+          };
           newPages[overPage].images[overIndex] = activeItem;
+
+          setTimeout(() => {
+            setPages((prevPages) => {
+              const updatedPages = [...prevPages];
+              updatedPages[activePage].images[activeIndex].isFading = false;
+              return updatedPages;
+            });
+          }, 100);
         }
 
         return newPages;
@@ -150,7 +168,12 @@ const PrintPage = ({ data }) => {
             <PageLayout>
               <SortableContext items={entry.images.map((img) => img.id)}>
                 {entry.images.map((image) => (
-                  <SortableItem key={image.id} id={image.id} url={image.url} />
+                  <SortableItem
+                    key={image.id}
+                    id={image.id}
+                    url={image.url}
+                    isFading={image.isFading}
+                  />
                 ))}
               </SortableContext>
             </PageLayout>
