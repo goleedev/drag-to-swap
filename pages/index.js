@@ -1,25 +1,28 @@
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import styled from "styled-components";
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import styled from 'styled-components';
+
+import { colors, spacing } from '../styles/theme';
 
 const Intro = styled.div`
   text-align: center;
-  padding: 100px 20px;
+  padding: 100px ${spacing.lg};
 
   h1 {
     margin-top: 50px;
   }
 
   a {
-    color: white;
-    background-color: #ff015c;
-    font-weight: 600;
-    font-size: 13px;
-    margin-top: 50px;
     display: inline-block;
-    border-radius: 8px;
+    margin-top: 50px;
     padding: 12.5px 50px;
+
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: ${colors.white};
+    background-color: ${colors.primary};
   }
 `;
 

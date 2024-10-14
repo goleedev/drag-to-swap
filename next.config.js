@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
+  images: {
+    domains: ['videodelivery.net', 'imagedelivery.net'],
+  },
   compiler: {
     styledComponents: true,
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
