@@ -1,4 +1,4 @@
-import { closestCenter, DndContext } from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -138,7 +138,7 @@ const PrintPage = ({ data }) => {
   };
 
   return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd}>
       <Wrapper>
         {pages.map((entry, pageIndex) => (
           <PrintWrapper key={pageIndex}>
