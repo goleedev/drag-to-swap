@@ -1,9 +1,11 @@
 import { useSortable } from '@dnd-kit/sortable';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
-import ImageIcon from './icons/ImageIcon';
 import { colors, size } from '../styles/theme';
+import ImageIcon from './icons/ImageIcon';
 
 const PrintPhoto = styled.div`
   display: flex;
@@ -25,43 +27,87 @@ const PrintPhoto = styled.div`
       opacity: 0.8;
     }
   }
+`;
 
-  &.fill-circle {
-    animation: circle-fill 0.8s forwards;
-  }
+const DragPreview = styled.div`
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
 
-  @keyframes circle-fill {
-    0% {
-      clip-path: circle(0% at 50% 50%);
-    }
-    100% {
-      clip-path: circle(100% at 50% 50%);
-    }
-  }
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 5px solid ${colors.white};
+  z-index: 100;
+  pointer-events: none;
 `;
 
 const SortableItem = ({ id, url }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useSortable({ id });
 
+  const [showPreview, setShowPreview] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const updatePosition = (e) => {
+      if (isDragging) {
+        setPosition({ x: e.clientX, y: e.clientY });
+      }
+    };
+
+    window.addEventListener('mousemove', updatePosition);
+    window.addEventListener('touchmove', (e) => updatePosition(e.touches[0]));
+
+    return () => {
+      window.removeEventListener('mousemove', updatePosition);
+      window.removeEventListener('touchmove', (e) =>
+        updatePosition(e.touches[0])
+      );
+    };
+  }, [isDragging]);
+
+  useEffect(() => {
+    setShowPreview(isDragging);
+  }, [isDragging]);
+
   return (
-    <PrintPhoto
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      style={{ opacity: isDragging ? 0.8 : 1 }}
-    >
-      {url ? (
-        <Image
-          width={600}
-          height={400}
-          src={url}
-          alt={`Test Image ${id}`}
-          loading="eager"
-        />
-      ) : (
-        <ImageIcon />
-      )}
-    </PrintPhoto>
+    <>
+      <PrintPhoto
+        ref={setNodeRef}
+        style={{ opacity: isDragging ? 0.5 : 1 }}
+        {...attributes}
+        {...listeners}
+      >
+        {url ? (
+          <Image
+            width={600}
+            height={400}
+            src={url}
+            alt={`Test Image ${id}`}
+            loading="eager"
+          />
+        ) : (
+          <ImageIcon />
+        )}
+      </PrintPhoto>
+
+      {showPreview &&
+        createPortal(
+          <DragPreview style={{ left: position.x, top: position.y }}>
+            {url && (
+              <Image
+                src={url}
+                alt={`Dragging ${id}`}
+                width={100}
+                height={100}
+                objectFit="cover"
+                loading="eager"
+              />
+            )}
+          </DragPreview>,
+          document.body
+        )}
+    </>
   );
 };
 
