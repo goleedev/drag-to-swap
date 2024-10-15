@@ -48,19 +48,29 @@ const PrintPhoto = styled.div`
 
   background-color: ${colors.lightGrey}60;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 
   img {
     display: block;
     max-width: ${size.full};
     height: auto;
+
+    :hover {
+      opacity: 0.8;
+    }
   }
 `;
 
 const SortableItem = ({ id, url }) => {
-  const { attributes, listeners, setNodeRef } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, isDragging } = useSortable({ id });
 
   return (
-    <PrintPhoto ref={setNodeRef} {...attributes} {...listeners}>
+    <PrintPhoto
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={{ opacity: isDragging ? 0.8 : 1 }}
+    >
       {url ? (
         <Image
           width={600}
