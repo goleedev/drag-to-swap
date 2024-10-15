@@ -6,22 +6,10 @@ import { PageLayout, PrintWrapper, Wrapper } from '../styles/printPageStyles';
 import { handleDragEnd } from '../utils/dragUtils';
 import PageHeader from './pageHeader';
 import SortableItem from './sortableItem';
+import { useInitialData } from '../hooks/useInitialData';
 
 const PrintPage = ({ data }) => {
-  const initialData = useMemo(
-    () =>
-      data.map((entry, pageIndex) => ({
-        ...entry,
-        images: entry.images
-          .concat(Array(2 - entry.images.length).fill(null))
-          .map((img, imgIndex) => ({
-            id: `${pageIndex}-${imgIndex}`,
-            url: img,
-          })),
-      })),
-    [data]
-  );
-
+  const initialData = useInitialData(data);
   const [pages, setPages] = useState(initialData);
 
   const onDragEnd = useCallback((event) => handleDragEnd(event, setPages), []);
