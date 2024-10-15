@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useCallback } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useDragAndDrop } from '../hooks/useDragAndDrop';
@@ -12,18 +13,30 @@ const SortableItem = ({ id, url }) => {
     setNodeRef,
     showPreview,
     position,
-    style,
     isDragging,
   } = useDragAndDrop(id);
+
+  const renderDragPreview = useCallback(() => {
+    return url ? (
+      <Image
+        src={url}
+        alt={`Preview ${id}`}
+        width={100}
+        height={100}
+        objectFit="cover"
+        loading="eager"
+      />
+    ) : null;
+  }, [url, id]);
 
   return (
     <>
       <PrintPhoto
         ref={setNodeRef}
-        style={style}
         {...attributes}
         {...listeners}
         $isDragging={isDragging}
+        $hasUrl={url}
       >
         {url ? (
           <Image
@@ -31,7 +44,7 @@ const SortableItem = ({ id, url }) => {
             height={400}
             src={url}
             alt={`Test Image ${id}`}
-            loading="eager"
+            loading="lazy"
           />
         ) : (
           <ImageIcon />
@@ -40,17 +53,14 @@ const SortableItem = ({ id, url }) => {
 
       {showPreview &&
         createPortal(
-          <DragPreview style={{ left: position.x, top: position.y }}>
-            {url && (
-              <Image
-                src={url}
-                alt={`Preview ${id}`}
-                width={100}
-                height={100}
-                objectFit="cover"
-                loading="eager"
-              />
-            )}
+          <DragPreview
+            style={{
+              left: position.x,
+              top: position.y,
+              display: url ? 'block' : 'none',
+            }}
+          >
+            {renderDragPreview()}
           </DragPreview>,
           document.body
         )}
