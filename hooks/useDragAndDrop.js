@@ -40,10 +40,6 @@ export const useDragAndDrop = (id) => {
     setShowPreview(isDragging && withinBounds);
   }, [isDragging, withinBounds]);
 
-  const style = {
-    opacity: isDragging ? 0.5 : 1,
-  };
-
   return {
     attributes,
     listeners,
@@ -51,6 +47,5 @@ export const useDragAndDrop = (id) => {
     isDragging,
     showPreview,
     position,
-    style,
   };
 };

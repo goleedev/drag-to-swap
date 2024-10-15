@@ -12,6 +12,7 @@ export const PrintPhoto = styled.div`
   cursor: pointer;
   transition: opacity 0.3s ease;
   overflow: hidden;
+  opacity: ${({ $isDragging, hasUrl }) => ($isDragging && hasUrl ? 0.8 : 1)};
 
   img {
     display: block;
@@ -21,7 +22,8 @@ export const PrintPhoto = styled.div`
     transition: opacity 0.8s ease;
 
     :hover {
-      opacity: ${({ $isDragging }) => ($isDragging ? 1 : 0.5)};
+      opacity: ${({ $isDragging, hasUrl }) =>
+        $isDragging && hasUrl ? 1 : 0.5};
     }
   }
 `;
