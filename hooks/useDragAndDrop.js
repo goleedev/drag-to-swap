@@ -25,14 +25,15 @@ export const useDragAndDrop = (id) => {
   );
 
   useEffect(() => {
-    window.addEventListener('mousemove', updatePosition);
-    window.addEventListener('touchmove', (e) => updatePosition(e.touches[0]));
+    const handleMouseMove = (e) => updatePosition(e);
+    const handleTouchMove = (e) => updatePosition(e.touches[0]);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove);
 
     return () => {
-      window.removeEventListener('mousemove', updatePosition);
-      window.removeEventListener('touchmove', (e) =>
-        updatePosition(e.touches[0])
-      );
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
     };
   }, [updatePosition]);
 
