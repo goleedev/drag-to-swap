@@ -1,46 +1,10 @@
 import { useSortable } from '@dnd-kit/sortable';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import styled from 'styled-components';
 
-import { colors, size } from '../styles/theme';
+import { DragPreview, PrintPhoto } from '../styles/sortableItemStyles';
 import ImageIcon from './icons/ImageIcon';
-
-const PrintPhoto = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: calc(50% - 10px);
-  background-color: ${colors.lightGrey}60;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-  overflow: hidden;
-
-  img {
-    display: block;
-    max-width: ${size.full};
-    height: auto;
-    transition: opacity 0.8s ease;
-
-    :hover {
-      opacity: 0.8;
-    }
-  }
-`;
-
-const DragPreview = styled.div`
-  position: fixed;
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
-
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 5px solid ${colors.white};
-  z-index: 100;
-  pointer-events: none;
-`;
 
 const SortableItem = ({ id, url }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useSortable({ id });
@@ -49,8 +13,8 @@ const SortableItem = ({ id, url }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [withinBounds, setWithinBounds] = useState(false);
 
-  useEffect(() => {
-    const updatePosition = (e) => {
+  const updatePosition = useCallback(
+    (e) => {
       if (isDragging) {
         const x = e.clientX;
         const y = e.clientY;
@@ -61,8 +25,11 @@ const SortableItem = ({ id, url }) => {
         setWithinBounds(isWithinBounds);
         setPosition({ x, y });
       }
-    };
+    },
+    [isDragging]
+  );
 
+  useEffect(() => {
     window.addEventListener('mousemove', updatePosition);
     window.addEventListener('touchmove', (e) => updatePosition(e.touches[0]));
 
@@ -72,7 +39,7 @@ const SortableItem = ({ id, url }) => {
         updatePosition(e.touches[0])
       );
     };
-  }, [isDragging]);
+  }, [updatePosition]);
 
   useEffect(() => {
     setShowPreview(isDragging && withinBounds);
@@ -105,7 +72,7 @@ const SortableItem = ({ id, url }) => {
             {url && (
               <Image
                 src={url}
-                alt={`Dragging ${id}`}
+                alt={`Preview ${id}`}
                 width={100}
                 height={100}
                 objectFit="cover"
