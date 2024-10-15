@@ -6,12 +6,25 @@ import { DragPreview, PrintPhoto } from '../styles/sortableItemStyles';
 import ImageIcon from './icons/ImageIcon';
 
 const SortableItem = ({ id, url }) => {
-  const { attributes, listeners, setNodeRef, showPreview, position, style } =
-    useDragAndDrop(id);
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    showPreview,
+    position,
+    style,
+    isDragging,
+  } = useDragAndDrop(id);
 
   return (
     <>
-      <PrintPhoto ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <PrintPhoto
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        $isDragging={isDragging}
+      >
         {url ? (
           <Image
             width={600}

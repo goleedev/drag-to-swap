@@ -2,17 +2,10 @@ import { useSortable } from '@dnd-kit/sortable';
 import { useCallback, useEffect, useState } from 'react';
 
 export const useDragAndDrop = (id) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, isDragging } = useSortable({ id });
 
-  const [showPreview, setShowPreview] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [showPreview, setShowPreview] = useState(false);
   const [withinBounds, setWithinBounds] = useState(false);
 
   const updatePosition = useCallback(

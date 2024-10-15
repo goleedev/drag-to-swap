@@ -21,7 +21,7 @@ export const PrintPhoto = styled.div`
     transition: opacity 0.8s ease;
 
     :hover {
-      opacity: 0.8;
+      opacity: ${({ $isDragging }) => ($isDragging ? 1 : 0.5)};
     }
   }
 `;
