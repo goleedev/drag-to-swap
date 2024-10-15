@@ -1,12 +1,12 @@
 import { DndContext } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
+import { useInitialData } from '../hooks/useInitialData';
 import { PageLayout, PrintWrapper, Wrapper } from '../styles/printPageStyles';
 import { handleDragEnd } from '../utils/dragUtils';
 import PageHeader from './pageHeader';
 import SortableItem from './sortableItem';
-import { useInitialData } from '../hooks/useInitialData';
 
 const PrintPage = ({ data }) => {
   const initialData = useInitialData(data);
