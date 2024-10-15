@@ -140,7 +140,7 @@ const PrintPage = ({ data }) => {
           });
         });
 
-        if (activeItem && overItem) {
+        if (activeItem?.url && overItem) {
           newPages[activePage].images[activeIndex] = {
             ...overItem,
           };
