@@ -47,11 +47,19 @@ const SortableItem = ({ id, url }) => {
 
   const [showPreview, setShowPreview] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [withinBounds, setWithinBounds] = useState(false);
 
   useEffect(() => {
     const updatePosition = (e) => {
       if (isDragging) {
-        setPosition({ x: e.clientX, y: e.clientY });
+        const x = e.clientX;
+        const y = e.clientY;
+
+        const isWithinBounds =
+          x > 0 && y > 0 && x < window.innerWidth && y < window.innerHeight;
+
+        setWithinBounds(isWithinBounds);
+        setPosition({ x, y });
       }
     };
 
@@ -67,8 +75,8 @@ const SortableItem = ({ id, url }) => {
   }, [isDragging]);
 
   useEffect(() => {
-    setShowPreview(isDragging);
-  }, [isDragging]);
+    setShowPreview(isDragging && withinBounds);
+  }, [isDragging, withinBounds]);
 
   return (
     <>
