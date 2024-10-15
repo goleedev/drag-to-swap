@@ -25,9 +25,7 @@ export const handleDragEnd = (event, setPages) => {
       });
 
       if (activeItem?.url && overItem) {
-        newPages[activePage].images[activeIndex] = {
-          ...overItem,
-        };
+        newPages[activePage].images[activeIndex] = { ...overItem };
         newPages[overPage].images[overIndex] = activeItem;
       }
 
