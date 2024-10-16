@@ -121,6 +121,9 @@ This project uses **Jest** and **React Testing Library** for unit and integratio
 
 ## Things to Improve
 
+- Mobile Support: Currently, the application works primarily on desktops. To enhance the mobile experience, the following improvements are necessary:
+  - Responsive Design: Implement media queries to ensure that the layout adapts to smaller screen sizes and maintains usability on mobile devices.
+  - Touch Events for Drag-and-Drop: Adapt the drag-and-drop functionality to support mobile touch interactions by handling events like touchstart, touchmove, and touchend. Ensure that users can drag and swap photos seamlessly using touch gestures.
 - Animations: Adding smooth animations to make the drag-and-drop process more intuitive and visually appealing:
   - Water Drop Animation: When starting to drag an image, a water drop effect can ripple out from the image to indicate that the item is being picked up.
   - Gradual Circular Filling Animation: When the dragged image is dropped into a new spot, the image should fill the new position starting from the center and expanding outward in a circular form.
