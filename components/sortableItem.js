@@ -47,7 +47,7 @@ const SortableItem = ({ id, url }) => {
             loading="lazy"
           />
         ) : (
-          <ImageIcon />
+          <ImageIcon data-testid="image-placeholder" />
         )}
       </PrintPhoto>
 

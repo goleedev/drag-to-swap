@@ -1,5 +1,7 @@
-const ImageIcon = () => (
+const ImageIcon = ({ ...props }) => (
   <svg
+    {...props}
+    data-testid={props['data-testid'] || 'image-icon'}
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
